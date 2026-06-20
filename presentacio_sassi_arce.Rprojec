@@ -1,0 +1,331 @@
+---
+title: "Desigualdades de hacinamiento de jóvenes en Chile"
+author: "Valentina Sassi y Krishna Arce"
+format: 
+  revealjs:
+    theme: moon
+    slide-number: true
+    transition: fade
+    css: estilos.css
+---
+
+# Introducción
+
+## Contexto del problema
+
+::::: columns
+::: {.column width="50%"}
+
+**Chile presenta desigualdades económicas que afectan a los jóvenes:**
+
+-   Diferencias intra e interregionales (Mieres Brevis, 2020)
+-   Brecha de los ingresos del 20% más rico son aproximadamente diez veces superiores a los del quintil más pobre.
+:::
+
+::: {.column width="50%"}
+**El modelo de vivienda en Chile:**
+
+-   Origen modelo neoliberal (dictadura)
+-   Subsidio focalizado
+-   Alta dependencia del mercado (Serey, 2023)
+:::
+:::::
+
+# Problema de investigación
+
+## Pregunta
+
+**¿Cómo influyen los ingresos económicos en las situaciones de hacinamiento de los jóvenes en Chile?**
+
+## Hipótesis
+
+Mientras menores sean los ingresos económicos de los jóvenes en Chile, mayores serán las probabilidades de presentar condiciones de hacinamiento habitacional debido a las limitaciones para acceder a una vivienda adecuada.
+
+# Objetivos
+
+::::: columns
+::: {.column width="50%"}
+### General
+
+Analizar la relación entre ingresos y hacinamiento en jóvenes CASEN 2022.
+:::
+
+::: {.column width="50%"}
+### Específicos
+
+-   Describir características socioeconómicas\
+-   Analizar hacinamiento\
+-   Construir IVS\
+-   Modelos de regresión\
+:::
+:::::
+
+# Metodología
+::::: columns
+::: {.column width="50%"}
+### Datos
+
+-   CASEN 2022
+-   Jóvenes 18–29 años
+-   Software: R / Quarto / tidyverse
+:::
+
+::: {.column width="50%"}
+### Técnicas
+
+-   Estadística descriptiva
+-   Regresión lineal y logística
+-   Correlaciones
+-   Índice IVS (Z-score)
+-   Alfa de Cronbach
+:::
+:::::
+
+# Variables
+
+::::: columns
+::: {.column width="50%"}
+### Dependiente
+
+-   Hacinamiento
+    -   Sin
+    -   Medio
+    -   Crítico
+:::
+
+::: {.column width="50%"}
+### Independiente
+
+-   Ingreso del hogar (`ytotcor`)
+-   Controles:
+    -   Sexo
+    -   Edad
+    -   Escolaridad
+    -   Ocupación
+:::
+:::::
+
+# Caracterización de la muestra
+
+## Estadísticos descriptivos
+
+| Variable              | Promedio   | Mediana   |
+|-----------------------|------------|-----------|
+| Ingreso               | \$461.383  | \$400.000 |
+| Escolaridad           | 13,3 años  | 13 años   |
+| Edad                  | 23,49 años | 23 años   |
+| Ratio de hacinamiento | 1,41       | 1,33      |
+
+## Interpretación
+
+Los resultados muestran una importante desigualdad económica entre los jóvenes, evidenciada por la diferencia entre el ingreso promedio (\$461.383) y la mediana (\$400.000). En contraste, la escolaridad (13,3 años) y la edad (23,5 años) presentan distribuciones más homogéneas. Respecto a la vivienda, el promedio de 1,41 personas por dormitorio indica niveles moderados de hacinamiento, aunque existen diferencias entre los hogares.
+
+# Distribución de ingresos
+
+![](images/clipboard-162418904.png){width="84%"}
+
+## Interpretación
+
+La distribución de ingresos presenta una fuerte asimetría hacia la derecha. Esto indica concentración de jóvenes en niveles bajos de ingreso, con una mediana de \$120.000, lo que refleja desigualdad económica estructural dentro del grupo analizado.
+
+# Distribución del Hacinamiento
+
++----------------------+--------------+--------------+
+|                      |              |              |
++----------------------+--------------+--------------+
+| hacinamiento_cat     | n            | porcentaje   |
+|                      |              |              |
+| \<ord\>              | \<dbl\>      | \<dbl\>      |
++----------------------+--------------+--------------+
+| Sin hacinamiento     | 3175853      | 92.0         |
++----------------------+--------------+--------------+
+| Hacinamiento medio   | 258284       | 7.5          |
++----------------------+--------------+--------------+
+| Hacinamiento crítico | 16150        | 0.5          |
++----------------------+--------------+--------------+
+
+## Resultados
+
+-   Sin hacinamiento: 92%
+-   Hacinamiento medio: 7,5%
+-   Hacinamiento crítico: 0,5%
+
+# Gráfico de distribución del hacinamiento
+
+![](images/clipboard-440092535.png)
+
+## Interpretación
+
+Los resultados muestran que la gran mayoría de los jóvenes no presenta condiciones de hacinamiento. Sin embargo, existe un grupo menor que sí enfrenta niveles de hacinamiento medio y crítico, lo que evidencia una situación de vulnerabilidad habitacional en ciertos segmentos de la población juvenil. Aunque minoritario, este grupo es relevante desde una perspectiva de política pública debido a sus implicancias en calidad de vida.
+
+# Distribución de la pobreza
+
+![](images/clipboard-800244217.png)
+
+## Interpretación
+
+La distribución de la pobreza muestra que la mayoría de los jóvenes no se encuentra en situación de pobreza (2.745.230 personas). No obstante, existe un porcentaje significativo que sí se encuentra en condiciones de pobreza no extrema (416.336) y extrema (291.387), lo que evidencia la persistencia de desigualdades socioeconómicas dentro de este grupo etario.
+
+# Índice de Vulnerabilidad Social
+
+## Construcción del IVS
+
+Se construyó mediante estandarización Z-score de:
+
+-   Ingreso
+-   Escolaridad
+-   Pobreza
+-   Desempleo
+-   Hacinamiento
+
+# Consistencia interna del IVS (Alfa de Cronbach)
+
+| Variable     | Correlación |
+|--------------|-------------|
+| Ingreso      | 0.699       |
+| Pobreza      | 0.626       |
+| Escolaridad  | 0.574       |
+| Desempleo    | 0.552       |
+| Hacinamiento | 0.515       |
+
+## Hallazgo principal
+
+-   Ingreso (0,699) y pobreza (0,626) son las variables con mayor aporte.
+-   Escolaridad (0,574) y desempleo (0,552) presentan contribuciones moderadas.
+-   Hacinamiento (0,515) aporta en menor medida.
+
+**Conclusión:** Las dimensiones económicas son las más importantes en el IVS.
+
+# Distribución del IVS
+
+![](images/clipboard-1469267972.png){width="634"}
+
+## Interpretación
+
+El histograma presenta una distribución normal y simétrica, concentrando más de **4.000 jóvenes** en niveles medios de vulnerabilidad alrededor del valor 0. Los casos de alta y baja vulnerabilidad son menos frecuentes, aunque los jóvenes con mayor vulnerabilidad requieren atención prioritaria.
+
+# Matriz de Correlaciones
+
+![](images/clipboard-976449184.png){width="526"}
+
+## Tabla con resultados
+
+| Variables                  | Correlación |
+|----------------------------|-------------|
+| Ingreso - Escolaridad      | 0.29        |
+| Ingreso - Hacinamiento     | -0.12       |
+| Escolaridad - Hacinamiento | -0.21       |
+
+## Interpretación
+
+-   Más educación se relaciona con mayores ingresos.
+-   Mayores ingresos se relacionan con menor hacinamiento.
+-   La educación aparece como un factor protector.
+
+# Asociación entre Escolaridad e Ingreso
+
+![](images/clipboard-1844205307.png){width="636"}
+
+## Interpretación
+
+El gráfico muestra una **relación positiva entre escolaridad e ingresos**: a mayor cantidad de años de estudio, mayores son los ingresos. Sin embargo, existe una gran dispersión en los niveles educativos más altos, lo que indica que la educación amplía las oportunidades económicas, pero no garantiza ingresos elevados para todos los jóvenes. Además, se observan algunos valores atípicos con ingresos excepcionalmente altos.
+
+# Regresión Lineal Múltiple
+
+## Modelos estimados
+
+Se estimaron tres modelos para analizar los factores asociados al ratio de hacinamiento:
+
+-   M1: Ingreso.
+-   M2: Ingreso + Escolaridad.
+-   M3: Ingreso + Escolaridad + Edad + Sexo.
+
+## Resultados principales
+
+| Variable    | M1          | M2          | M3          |
+|-------------|-------------|-------------|-------------|
+| Ingreso     | -0.00\*\*\* | -0.00\*\*\* | -0.00\*\*\* |
+| Escolaridad |             | -0.05\*\*\* | -0.05\*\*\* |
+| Edad        |             |             | 0.02\*\*\*  |
+| Mujer       |             |             | 0.10\*\*\*  |
+| R²          | 0.013       | 0.048       | 0.061       |
+
+## Hallazgos
+
+-   El ingreso presenta una relación negativa y significativa con el hacinamiento.(β ≈ -0,00; p \< 0,001).
+-   La escolaridad reduce significativamente el ratio de hacinamiento. (β = -0,05; p \< 0,001).
+-   La edad aumenta levemente el hacinamiento. (β = 0,02; p \< 0,001).
+-   Las mujeres presentan niveles ligeramente superiores de hacinamiento. (β = 0,10; p \< 0,001).
+-   El modelo M3 presenta el mejor ajuste (R² = 0,061), aunque existen otros factores no incluidos que también influyen en el hacinamiento.
+
+# Efecto Predicho de la Escolaridad
+
+![](images/clipboard-2325631305.png)
+
+## Interpretación
+
+El gráfico muestra una **relación inversa entre escolaridad y hacinamiento**: a medida que aumentan los años de estudio, el ratio de hacinamiento disminuye de aproximadamente **2,0 a 1,0**. La pendiente negativa indica que cada año adicional de escolaridad reduce el hacinamiento de forma constante, mientras que la estrecha banda de confianza refleja una estimación precisa. En conjunto, la educación actúa como un **factor protector frente al hacinamiento**.
+
+# Regresión Logística
+
+## Variable dependiente
+
+Presencia de hacinamiento (1 = sí, 0 = no)
+
+### Odds Ratios (OR)
+
+| Variable    | OR          |
+|-------------|-------------|
+| Escolaridad | 0.868\*\*\* |
+| Mujer       | 1.368\*\*\* |
+| Ingreso     | 1.000\*\*\* |
+
+## Hallazgos
+
+-   Cada año adicional de escolaridad reduce la probabilidad de hacinamiento en aproximadamente 13,2%.
+-   Las mujeres presentan un 36,8% más probabilidades de vivir en hacinamiento que los hombres.
+-   El ingreso mantiene una relación inversa y significativa con el fenómeno.
+
+# Probabilidades Predichas
+
+## Ingreso y probabilidad de hacinamiento
+
+![](images/clipboard-4010729627.png)
+
+## Hallazgo
+
+El gráfico muestra una **relación inversa entre ingreso y hacinamiento**: a medida que aumentan los ingresos del hogar, disminuye la probabilidad de vivir en condiciones de hacinamiento. Esta probabilidad baja de aproximadamente **7% en los ingresos más bajos** a **menos de 1% en los más altos**, lo que evidencia que los recursos económicos actúan como un factor de protección frente a la vulnerabilidad habitacional.
+
+# Discusión
+
+## Principales hallazgos
+
+-   Se confirma la hipótesis inicial.
+-   Los ingresos constituyen el principal factor asociado al hacinamiento.
+-   La escolaridad opera como mecanismo de protección social.
+-   Existen desigualdades de género persistentes.
+-   La vulnerabilidad debe entenderse desde una perspectiva multidimensional.
+
+# Conclusiones
+
+## Conclusiones generales
+
+1.  Los menores ingresos aumentan significativamente el riesgo de hacinamiento.
+
+2.  La educación reduce la vulnerabilidad habitacional.
+
+3.  El IVS demuestra que la vulnerabilidad social es multidimensional.
+
+4.  La desigualdad económica sigue condicionando las oportunidades habitacionales de los jóvenes.
+
+# Referencias
+
+-   Instituto Nacional de Estadísticas (INE). 2024. «Presentación nacional Censo de Población y Vivienda 2024». https://www.ine.gob.cl/docs/default-source/conferencias/2025/cc-cpv-presentacion-nacional-2024.pdf.
+
+-   Mieres Brevis, Michelle. 2020. «La Dinamica de La Desigualdad En Chile: Una Mirada Regional». Revista de Análisis Económico 35 (2): 91-133. https://doi.org/10.4067/S0718-88702020000200091.
+
+-   Serey, Claudia. 2023. «El rol del Estado en el aseguramiento del derecho a una vivienda adecuada en Chile». Tesis doctoral. 
+
+# Muchas Gracias
+
+![](images/clipboard-3276239241.png)
