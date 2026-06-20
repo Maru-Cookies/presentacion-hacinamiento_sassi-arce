@@ -1,0 +1,510 @@
+---
+title: "Desigualdad económica en situaciones de hacinamiento en jóvenes de Chile"
+author: "Krishna Arce y Valentina Sassi"
+date: "2026-03-24"
+format: html
+editor: visual
+toc: true
+embed-resources: true
+theme: darkly
+css: estilos.css
+lang: es
+bibliography: bibliografias.bib
+link-citations: true
+project:
+  output-dir: docs
+---
+
+## Introducción
+
+En chile las desigualdades económicas son una brecha significativa en la calidad de vida en los/as jovenes chilenos, donde la poblaciones más ricas son las más priviligiadas. Según @mieresbrevis2020 desigualdad de Chile es intra e interregional, los ingresos del 20% de la población más rica son 10 veces mayores que los del quintil más pobre (OCDE, 2018), siendo sorprendentemente mayor que el promedio de los países de la OCDE.
+
+Desde una perspectiva historica, se plantea que también los efectos del neoliberalismos han repercutido en desigualdades económicas que afectan a las viviendas, como nos menciona @serey2023 las políticas de vivienda actuales tienen su origen en la introducción del neoliberalismo durante la dictadura militar y se caracterizan por su focalización en los grupos más vulnerables de la población, por la priorización del régimen de propiedad por encima de otros tipos de tenencia y por el subsidio a la demanda.
+
+En este sentido, esta situación se relaciona con las desigualdes socioeconómicas estructurales presentes en Chile, las cuales han sido influenciadas por el modelo neoliberalista, que presentan factores como el alto costo de la vivienda, nos hace preguntarnos en nuestra investigación, ¿Cómo influyen los ingresos económicos en las situaciónes de hacinamiento en los jovenes de Chile?
+
+A partir de esta problemática, plateamos la siguiente hipótesis: Mientras menores sean los ingresos económicos de los/as jóvenes de Chile, mayores serán las probabilidades de presentar condiciones de hacinamiento habitacional, debido a las limitaciones económicas para acceder a viviendas adecuadas. Mientras que menores sean los ingresos económicos de los/as jóvenes en Chile, mayores serán las probabilidades de presentar condiciones de hacinamiento habitacional, debido a las limitaciones económicas para acceder a viviendas adecuadas.
+
+Para esto, definiremos las variables; En primer lugar, la variable independiente está hace referencia hacia los ingresos del hogar, como el total de ingresos percibidos. En segundo lugar, la variable dependiente siendo el hacinamiento crítico, que se refiere según el Censo del año 2024 @presenta2024 , el hacinamiento se produce cuando residen 2,5 personas o más en promedio por dormitorio en una vivienda. El hacinamiento puede clasificarse en hacinamiento medio y hacinamiento crítico.
+
+Para el análisis de datos, se utilizará la base de datos de la Encuesta de Caracterización Socioeconomica Nacional (CASEN) del año 2022, para identificar las brechas de desigualdad en Chile desde una perspectiva cuantitativa en la relación de las variables de los ingresos y condiciones de vivienda.
+
+![Desigualdades sociales en vivienda](https://cronicasdelsur.cl/wp-content/uploads/2023/11/VIVIENDA2.jpg)
+## Objetivos
+
+## Objetivo general
+
+Analizar y interpretar la relación entre la desigualdad económica y condiciones de hacinamiento en jóvenes de Chile utilizando datos de la Encuesta CASEN 2022.
+
+## Objetivos específicos
+
+-   Operacionalizar variables relacionadas con ingresos, hacinamiento y características sociodemográficas.
+-   Describir estadísticamente las variables seleccionadas.
+-   Analizar la asociación entre ingresos económicos y hacinamiento.
+-   Construir un índice de vulnerabilidad social asociado a condiciones habitacionales.
+-   Interpretar los resultados obtenidos mediante tablas y visualizaciones.
+
+## Metodología
+
+En nuestra investigación utilizaremos las base de datos de la Casen del año 2022, que nos permite aproximarnos alnalisis de las condiciones socioeconómicas y codiciones habitacionales de la población chilena.
+
+Para esto, se realizará un análisis mediante los software de RStudio y el uso de Quarto para la elaboración de un reporte dinámico. En primer lugar, se filtrara la población del estudio, considerando únicamente los/as jóvenes entre 18 y 29 años de acuerdo a nuestro objeto de estudio.
+
+Posteriormente, se seleccionaron 4 variables acorde a nuestra investigación para realizar nuestro análisis del problema de investigación:
+
+-   **Ingreso del hogar (ytotcor)**: variable que es de nivel de razón representando los recursos económicos de ingreso en el hogar y actúa como variable independiente.
+
+-   **Edad (edad)**: variable de razón utilizada para delimitar la población de estudio en jovenes entre 18 y 29 años.
+
+-   **Escolaridad (esc → escolaridad)**: variable de nivel de razón, nos permiten identifical la difrencias de nivel educativo entre los/as individuops en relación con su capital.
+
+-   **Sexo (sexo)**: variable nominal que nos permite caracterizar sociodemográficamente a los/as individuos.
+
+-   **Ocupación (o1 → ocupacion)**: variable dicotómica construida a partir de la condición de actividad laboral de los individuos, identificando si trabajaron al menos una hora durante la semana anterior a la encuesta.
+
+-   **Hacinamiento (hacinamiento_cat)**: variable ordinal construida a partir del número de personas en el hogar (numper) y el número de dormitorios (v_27_a), que clasifica las condiciones habitacionales en tres niveles: sin hacinamiento, hacinamiento medio y hacinamiento crítico.
+
+Posteriormente, en el proceso de operacionalización, se realizara una limpieza de datos, con tratamiento de valores perdidos (NA), la recodificación de variables y ordenamiento de categorías.
+
+Para permitirnos elaborar tablas descriptivas (medidas de tendencia central) y tablas de frecuencia para variables categóricas, en conjunto con gráficos univariados que nos permiten visualizar la distribución de las variables principales.
+
+Finalmente, se elaboró un Índice de Vulnerabilidad Social (IVS), integrando las dimensiones asociadas a desigualdad estructural: ingreso, escolaridad, pobreza, ocupación y condiciones habitacionales. Para ello, las variables fueron estandarizadas mediante puntajes Z-score, permitiendonos combinar los indicadores medidos en distintas escalas. Para asi, el índice final calcularlo a partir del promedio simple de las dimensiones estandarizadas, asignando una ponderación a cada componente. Además, dee evaluar la consistencia interna del índice mediante el coeficiente alfa de Cronbach y las asociacioness entre la escolaridad e ingreso.
+
+## R Analisis de Datos
+
+```{r}
+# 1. Cargar Paquetes 
+
+#Librerías
+library(tidyverse)
+library(haven)
+library(snakecase)
+library(summarytools)
+library(dplyr)
+library(kableExtra)
+library(psych)
+library(knitr)
+library(corrplot)
+library(ggeffects)
+library(sjPlot)
+library(texreg)
+library(modelsummary)
+library(insight)
+library(ggplot2)
+
+# 1.2. Configuración para evitar notación científica
+options(scipen = 999)
+
+# 2. Cargar base de datos
+casen <- read_sav("C:/Users/shirochifuyu/Downloads/casen_2022.sav")
+
+# 3. Limpiar variables
+names(casen) <- make.unique(names(casen))
+
+# 4. Convertir a data.frame
+
+casen <- as.data.frame(casen)
+
+# 5. Filtrar población de jóvenes (18 a 29 años)
+cas_jovenes <- casen %>%
+  filter(edad >= 18 & edad <= 29) %>%
+  # Limpieza de valores perdidos (-88, -99) en variables numéricas
+  mutate(across(where(is.numeric), ~na_if(., -88)),
+         across(where(is.numeric), ~na_if(., -99)))
+
+
+# 6. Operalización de variables
+
+cas_jovenes <- cas_jovenes %>%
+  mutate(
+    # Ingreso: Se mantiene lógica, ytotcor es la variable derivada oficial
+    ingreso = if_else(ytotcor > 0, ytotcor, NA_real_),
+    
+    # Escolaridad: Basado en años de escolaridad (esc)
+    escolaridad = as.numeric(esc),
+    
+    # Hacinamiento: Ajuste de precisión según estructura de hogares
+    # Se usa v27a para viviendas de un solo hogar y v29a para hogares en viviendas compartidas
+    dormitorios_hogar = if_else(is.na(v29a), v27a, v29a),
+    
+    hacinamiento_ratio = case_when(
+      dormitorios_hogar > 0 ~ tot_per_h / dormitorios_hogar,
+      dormitorios_hogar == 0 ~ tot_per_h, # Si no hay piezas, el ratio es el total de personas
+      TRUE ~ NA_real_
+    ),
+    
+    # Categorías de hacinamiento (Estándar MDSN)
+    hacinamiento_cat = factor(
+      case_when(
+        hacinamiento_ratio < 2.5 ~ "Sin hacinamiento",
+        hacinamiento_ratio >= 2.5 & hacinamiento_ratio < 5 ~ "Hacinamiento medio",
+        hacinamiento_ratio >= 5 ~ "Hacinamiento crítico"
+      ),
+      levels = c("Sin hacinamiento", "Hacinamiento medio", "Hacinamiento crítico"),
+      ordered = TRUE
+    ),
+    
+    # Sexo: 1: Hombre, 2: Mujer [8]
+    sexo_cat = factor(sexo, levels = c(1, 2), labels = c("Hombre", "Mujer")),
+    
+    # Pobreza: Categoría de pobreza (1:Extrema, 2:No Extrema, 3:No Pobre)
+    pobreza_cat = factor(pobreza, levels = c(1, 2, 3), 
+                         labels = c("Pobreza extrema", "Pobreza no extrema", "No pobre")),
+    
+    # Ocupación: o1 registra si trabajó al menos una hora la semana pasada [9]
+    ocupacion = if_else(o1 == 1, 1, 0)
+  )
+# 7. TABLA DESCRIPTIVA
+
+tabla_desc <- cas_jovenes %>%
+  select(
+    ingreso,
+    escolaridad,
+    hacinamiento_ratio,
+    edad,
+    tot_per_h
+  ) %>%
+  psych::describe()
+
+print(tabla_desc)
+
+
+```
+**Interpretación:** En primer lugar, se presenta un promedio de **\$461.383** mensuales de la variable de los ingresos, mientras que la mediana alcanza los **\$400.000**. La diferencia entre ambas medidas sugiere la existencia de una distribución asimétrica hacia ingresos más altos, es decir, algunos hogares con ingresos elevados aumentan el promedio general, reflejándonos una alta desviación estándar (**\$422.455**), indicando una heterogeneidad económica entre los casos analizados. Agregando que, del promedio recortado (**trimmed mean**) de **\$402.296** aproximado a la mediana que, al promedio total, reforzándonos la idea de que existen valores extremos altos que influyen en la media. En segundo lugar, de acuerdo con la escolaridad, presentan un promedio de **13,3**años de estudio, con una mediana de **13** años, indicándonos que la mayoría de los/as jóvenes poseen una educación media completa y, en algunos casos, acceso parcial a educación superior. Mientras, que la desviación estándar de **2,69** años, nos evidencia una variabilidad educativa dentro de la muestra, aunque menor en comparación con la dispersión observada en los ingresos, cercana entre la media, mediana y media recortada, siendo una distribución equilibrada. Por otra parte, en el hacinamiento_ratio, el promedio es de **1,41** personas por dormitorio y la mediana de **1,33**, indicándonos que, en promedio, los hogares presentan niveles moderados de hacinamiento.
+
+Por otra parte, la desviación estándar de **0,64**, nos permite evidenciar las diferencias en las condiciones habitacionales de los hogares, debido a la existencia de casos con mayores niveles de sobreocupación residencial. Mientras que, la cercanía entre la media y la media recortada nos evidencia que no existen valores extremos muy influyentes en esta variable. También, la variable de la edad, con un promedio de **23,49** años y una mediana de **23 años**, nos permite entender que es una distribución bastante homogénea dentro del grupo etario estudiado.
+
+Además de poseer una desviación estándar de **3,43 años** siendo una dispersión moderada, con una población concentrada en el tramo de juventud. Finalmente, en la variable tot_per_h (total de personas en el hogar) con promedio de **3,86** integrantes por hogar y una mediana de **4**personas. Nos evidencia que la mayoría de los/as jóvenes reside en hogares de tamaño medio, con una desviación estándar de **1,59** reflejándonos la diversidad en la composición de los hogares, debido a la existencia de hogares pequeños como hogares más numerosos. Donde, la diferencia es mínima entre el promedio y la media recortada con una distribución estable, sin presencia de valores extremos. En resumen, estas estadísticas descriptivas nos evidencian que la población joven analizada posee importantes desigualdades económicas y habitacionales, mientras que en las variables como la edad y la escolaridad sus distribuciones son más homogéneas. Donde estos antecedentes son relevantes para comprender la construcción del Índice de Vulnerabilidad Social y las distintas dimensiones que afectan las condiciones de vida de la juventud en Chile.
+
+```{r}
+# 8. Tabla de frecuencias de hacinamiento ponderada
+# El uso de 'expr' (factor de expansión) es esencial para la representatividad.
+tabla_frec_hacina <- cas_jovenes %>%
+  filter(!is.na(hacinamiento_cat)) %>%
+  count(hacinamiento_cat, wt = expr) %>%
+  mutate(porcentaje = round(n / sum(n) * 100, 1))
+
+# Generar la tabla
+tabla_frec_hacina %>%
+  kable(digits = 1, 
+        caption = "Distribución de hacinamiento en jóvenes (Población Estimada)",
+        col.names = c("Categoría", "Población (N)", "Porcentaje (%)")) %>%
+  kable_styling(full_width = FALSE, position = "center")
+
+```
+
+**Interpretación**: De acuerdo con los datos presentados, se puede observar que la mayoría de los jóvenes (**92.0%**) se encuentra en una situación "sin hacinamiento", lo que indica que residen en viviendas con condiciones adecuadas de espacio en relación con el número de ocupantes.
+
+Por otro lado, un **7.5%** de los jóvenes vive en "hacinamiento medio", es decir, existe una cierta presión sobre el espacio disponible, aunque no alcanza niveles extremos. Esta proporción, aunque minoritaria, representa a más de **258 mil** jóvenes, lo cual es un grupo relevante para políticas de vivienda y bienestar.
+
+Finalmente, un **0.5%** se encuentra en "hacinamiento crítico", la categoría más severa. Aunque el porcentaje es pequeño, equivale a más de 16 mil jóvenes que enfrentan condiciones muy precarias de espacio, con posibles impactos negativos en su salud, privacidad, rendimiento escolar y convivencia familiar.
+
+En resumen, mientras que la gran mayoría de los jóvenes no presenta problemas de hacinamiento, existe un segmento no despreciable (**8% en total, sumando medio y crítico**) que requiere atención, especialmente el grupo en situación crítica, pues enfrenta las condiciones más desfavorables para su desarrollo.
+
+```{r}
+# 9. Gráfico de distribución de ingresos(Univariado)
+ggplot(cas_jovenes, aes(x = ingreso)) +
+  geom_histogram(fill = "#2a9d8f", color = "white", bins = 50) +
+  scale_x_log10(labels = scales::dollar_format(prefix = "$", big.mark = ".")) + # Escala log para visualizar mejor desigualdad
+  labs(title = "Distribución del Ingreso Total en Jóvenes (Escala Log)",
+       x = "Ingreso (log)", y = "Frecuencia") +
+  theme_minimal()
+
+```
+
+**Interpretación:** En el gráfico se puede interpretar como que el ingreso de la población joven en Chile presenta una distribución altamente asimétrica, con una marcada concentración en los tramos de ingresos bajos. Al aplicar una escala logarítmica (**base 10**), se logra visibilizar la masa crítica de la muestra que, en una escala lineal, quedaría comprimida debido a la extrema desigualdad de los datos.
+
+Del análisis visual se desprenden los siguientes puntos:
+
+Concentración en la Mediana: El punto de mayor frecuencia (la barra más alta) coincide con el tramo de la mediana de **\$120.000**. Esto confirma visualmente que la gran mayoría de los jóvenes se sitúa en niveles de ingreso significativamente inferiores al promedio, reflejando una realidad de precariedad o alta dependencia económica.
+
+Brecha de Desigualdad: A pesar de que la escala logarítmica suaviza la curva, se observa una caída drástica en la frecuencia a medida que aumenta el ingreso. Esto demuestra que alcanzar tramos salariales superiores es un fenómeno excepcional y minoritario para las personas de entre 18 y 29 años.
+
+Representatividad: La forma de la distribución valida que el “joven promedio” en Chile habita en hogares con recursos limitados, lo que contrasta con los altos niveles de escolaridad observados en las tablas descriptivas previas.
+
+```{r}
+# 10. Gráfico de distribucción de la pobreza (Univariado)
+ggplot(
+  cas_jovenes %>% filter(!is.na(pobreza_cat)),
+  aes(x = pobreza_cat, fill = pobreza_cat)
+) +
+  
+  geom_bar(aes(weight = expr)) +
+  
+  geom_text(
+    aes(
+      weight = expr,
+      label = after_stat(count)
+    ),
+    stat = "count",
+    vjust = -0.5,
+    size = 3
+  ) +
+  
+  scale_fill_brewer(palette = "Set2") +
+  
+  labs(
+    title = "Distribución de pobreza en población joven",
+    x = "Condición de pobreza",
+    y = "Población estimada"
+  ) +
+  
+  theme_minimal() +
+  
+  theme(
+    legend.position = "none"
+  )
+```
+
+**Interpretación:** Para comenzar de acuerdo con el gráfico de distribucción de la pobreza de la población joven, nos evidencia que la mayoría se encuentra en la categoría no pobre, en una cifra aproximadamente de **2.745.230** personas,sin embargo, se percibe en una situación de pobreza no extrema de **416.336** personas, mientras que un grupo reducido de **291.387** personas se encuentran en condiciones de pobreza extrema. Reflejandonos que, la mayoría de los/as jovénes presentan condiciones que no son de pobreza al igual que en las situaciones de hacinamiento, se encuentran la mayoría sin hacinamiento. Pero a pesar, de que la mayoría de los/as jovenes no poseen condiciones de pobreza extrema o hacinamiento crítico, se evidencia un segmento de grupos de la población de jovenes que si poseen condiciones de vulnaberidad ecónomica, sobretodo en la diferencia entre la pobreza extrema y no extrema, que es singnificativa,reflejandonos las distintas desigualdades enfretadas por los/as joves de acuerdo a sus niveles de pobreza como hacinamiento, por lo que deberían requerir de la atención de políticas públicas en particulas los grupos que presentan condiciones de hacinamiento crítico como de pobreza extrema.
+
+```{r}
+# 11 . Construcción de Índice de Vulnebaribilidad 
+# Estandarización Z-score (Z alto = Mayor Vulnerabilidad)
+
+cas_jovenes <- cas_jovenes %>%
+  mutate(
+    z_hacinamiento = as.numeric(scale(hacinamiento_ratio)),
+    z_ingreso      = as.numeric(scale(-ingreso)),
+    z_escolaridad  = as.numeric(scale(-escolaridad)),
+    # Pobreza: 1=Extrema, 2=No Extrema, 3=No Pobre. 
+    # El signo negativo asegura que el valor más bajo (extrema) aporte más vulnerabilidad.
+    z_pobreza      = as.numeric(scale(-as.numeric(pobreza))), 
+    z_desempleo    = as.numeric(scale(-ocupacion))
+  )
+
+# 12. Calculo de índice de vulnerabilidad social (IVS)
+
+cas_jovenes$indice_vulnerabilidad <- rowMeans(
+  cas_jovenes %>% select(z_hacinamiento, z_ingreso, z_escolaridad, z_pobreza, z_desempleo),
+  na.rm = TRUE
+)
+
+# 13. Alfa de Cronbach (Consistencia Interna)
+
+alpha_indice <- alpha(
+  cas_jovenes %>% 
+    select(z_hacinamiento, z_ingreso, z_escolaridad, z_pobreza, z_desempleo)
+)
+print(alpha_indice)  
+
+```
+
+**Interpretación:** De acuerdo con los resultados del análisis de consistencia interna , que nos permiten evaluar el grado de coherencia de las variables seleccionadas de la construcción del Índice de Vulnerabilidad Social (IVS). Podemos evidenciar que, las correlaciones de las variables aportan positivamente al índice, aunque con distinta intensidad. En primer lugar, en la variable **z_ingreso**, su asociación es más fuerte con el índice, con un valor de **raw.r = 0,699** y **std.r = 0,713**, indicándonos que el ingreso constituye una de las dimensiones centrales de la vulnerabilidad social, de manera significativa en la consistencia interna del indicador. Además, su correlación corregida (**r.cor = 0,651**) y la correlación del ítem-total (**r.drop = 0,449**) nos permite comprender una relación sólida con el conjunto del índice de la variable.
+
+Por otro lado, la variable **z_pobreza**, es una contribución importante al IVS (**raw.r = 0,626**), evidenciándonos que la condición de pobreza se relaciona de manera consistente con las demás dimensiones de vulnerabilidad. Donde su correlación corregida es de **r.cor = 0,424**, siendo esta esta variable una proporción relevante en la varianza del índice general. También en la variable **z_escolaridad**, con correlaciones moderadas de **raw.r = 0,574**, nos indica la contribución significativa del nivel educativo, pero que es menos intensa que el ingreso o la pobreza. Donde la escolaridad va operando como un recurso estructural que influye indirectamente sobre las oportunidades económicas y laborales de los jóvenes.
+
+Sin embargo, en el caso de la variable **z_desempleo**, que nos da como resultado **raw.r = 0,552**, nos evidencian una relación moderada con el índice. Donde, la inserción laboral aparece vinculada a la vulnerabilidad social, aunque con una variabilidad mayor debido a las características transitorias del empleo juvenil. Finalmente, con la variable del **z_hacinamiento**, poseen correlaciones más bajas (**raw.r = 0,515 y r.drop = 0,169**). Indicándonos, que las condiciones habitacionales además de ser parte de la vulnerabilidad social poseen una relación menos fuerte a diferencia de las demás dimensiones incluidas en el índice. Sin embargo, sus valores siguen siendo positivos y aceptables, aportando información relevante sobre la precariedad residencial. En resumen, el Índice de Vulnerabilidad Social presenta una consistencia interna adecuada, ya que todas las variables aportan positivamente a la medición de la vulnerabilidad. Donde las dimensiones económicas, particularmente el ingreso y la pobreza, poseen un mayor peso dentro del índice, a diferencia de las variables laborales y habitacionales que complementan su carácter multidimensional.
+
+```{r}
+# 14. Gráfico de distriibucción del índice 
+ggplot(cas_jovenes,
+       aes(x = indice_vulnerabilidad)) +
+  
+  geom_histogram(
+    bins = 40,
+    fill = "#457b9d",
+    color = "white"
+  ) +
+  
+  labs(
+    title = "Distribución del Índice de Vulnerabilidad Social",
+    x = "Índice de Vulnerabilidad",
+    y = "Frecuencia"
+  ) +
+  
+  theme_minimal()
+```
+
+**Interpretación:** El histograma del Índice de Vulnerabilidad Social muestra una distribución aproximadamente simétrica y con forma de campana, semejante a una distribución normal. En la cual se observa como la gran mayoría de los jóvenes se concentra en niveles de vulnerabilidad media, con un pico central que supera los **4.000 casos** alrededor del valor **0** del índice estandarizado.
+
+Al ser una distribución simétrica, ambos extremos se comportan de manera equivalente. La cola izquierda, que representa valores negativos del índice y por lo tanto una menor vulnerabilidad o mayor protección social, disminuye de forma gradual a medida que nos alejamos del centro. De igual manera, la cola derecha, que representa valores positivos y una mayor vulnerabilidad social, también disminuye de forma gradual y en proporción similar. Esto significa que hay aproximadamente tantos jóvenes en situación de vulnerabilidad extrema como jóvenes en situación de alta protección social.
+
+Desde una perspectiva social, esta simetría indica que la vulnerabilidad no está sistemáticamente sesgada hacia un lado. Los factores de riesgo y los factores protectores se distribuyen de manera relativamente homogénea en la población juvenil estudiada. Sin embargo, esto no le resta importancia a la cola derecha, ya que los jóvenes con alta vulnerabilidad requieren intervenciones focalizadas a pesar de ser un grupo reducido en términos porcentuales.
+
+Al comparar con el indicador de hacinamiento analizado anteriormente, se observa una diferencia importante. Mientras que el hacinamiento presentaba una distribución muy asimétrica con el **92%** de los jóvenes sin problemas de hacinamiento, el índice de vulnerabilidad social es mucho más equilibrado. Esto se debe a que el índice integra múltiples dimensiones como ingresos, educación, empleo y vivienda, mientras que el hacinamiento es un indicador más específico y concentrado.
+
+En conclusión, la mayoría de los jóvenes se encuentra en un nivel medio de vulnerabilidad, los extremos son pequeños pero equilibrados, y la atención prioritaria debe dirigirse a la cola derecha de alta vulnerabilidad sin descuidar las políticas de prevención para el grupo central.
+
+```{r}
+# 15. Matriz de correlaciones 
+matriz_corr <- cas_jovenes %>%
+  select(ingreso, escolaridad, hacinamiento_ratio, indice_vulnerabilidad) %>%
+  cor(use = "complete.obs")
+
+# 15.1. Vizualización 
+
+corrplot(matriz_corr, method = "color", type = "upper", 
+         tl.col = "black", addCoef.col = "black")
+
+```
+
+**Interpretación:** De acuerdo con la matriz de correlaciones, nos evidencian relaciones consistentes entre las variables incluidas en el Índice de Vulnerabilidad Social (IVS). En primer lugar, el ingreso y la escolaridad poseen una correlación positiva baja-moderada de **r = 0,29**, indicando que mayores niveles educativos tienden a asociarse con mayores ingresos. Por otro lado, el hacinamiento se relaciona de manera negativa con el ingreso, siendo un resultado de **r = -0,12**, como con la escolaridad en un **r = -0,21**, evidenciándonos que las condiciones habitacionales más vulnerables se concentran en hogares con menores recursos económicos y educativos disponibles. Asimismo, de acuerdo con el índice de vulnerabilidad, se puede evidenciar una correlación negativa fuerte con el ingreso de **r = -0,70** y con la escolaridad con un **r = -0,62**. Donde mientras mayores sean los ingresos y mayor será el nivel educativo, asociado con menores niveles de vulnerabilidad social. En contraste, respecto con el hacinamiento, posee una correlación positiva moderada con el índice en un **r = 0,52**, indicándonos qué las condiciones habitacionales más precarias, pueden aumentar la vulnerabilidad social en los/as jóvenes.
+
+```{r}
+# 16. Gráfico de asociación entre escolaridad e ingreso
+ ggplot(
+  cas_jovenes,
+  aes(x = escolaridad, y = ingreso)
+) +
+  
+  geom_point(alpha = 0.2) +
+  
+  geom_smooth(
+    method = "lm",
+    se = FALSE,
+    color = "red"
+  ) +
+  
+  labs(
+    title = "Relación entre escolaridad e ingreso",
+    x = "Años de escolaridad",
+    y = "Ingreso"
+  ) +
+  
+  theme_minimal()
+```
+
+**Interpretación:** El gráfico es un diagrama de dispersión que muestra la relación entre los años de escolaridad y el ingreso en la población juvenil. En el eje horizontal se representan los años de escolaridad, que van desde **0 hasta 20 años**. En el eje vertical se representa el ingreso, que va desde **0** hasta **600.000** unidades monetarias, aunque existen valores atípicos que superan ampliamente ese rango.
+
+En términos generales, se observa una relación positiva entre ambas variables: a mayor cantidad de años de estudio, mayor es el ingreso que perciben los jóvenes. Esto se confirma visualmente por la línea de regresión (de color rojo), que tiene una pendiente ascendente clara.
+
+Sin embargo, el hallazgo técnico más relevante del gráfico es la presencia de heterocedasticidad, es decir, la variabilidad de los ingresos no es constante a lo largo de los años de escolaridad, sino que se abre en forma de abanico a medida que nos desplazamos hacia la derecha. Para niveles bajos de escolaridad, entre **0 y 10 años**, los ingresos están muy comprimidos cerca de la base, cercanos a cero o a salarios mínimos. Tener pocos años de estudio prácticamente garantiza ingresos bajos, con muy pocas excepciones. En cambio, al superar los **12 años** de escolaridad, que suele coincidir con el egreso de la educación secundaria, y especialmente entre los **15 y 20 años**, correspondiente a educación superior, la nube de puntos se dispersa fuertemente hacia arriba. Esto demuestra que la educación superior abre el techo de los ingresos, permitiendo sueldos que pueden superar los dos, cuatro e incluso seis millones de unidades monetarias, pero no los garantiza para todos, ya que también existe una gran cantidad de jóvenes con alta escolaridad que siguen percibiendo ingresos bajos.
+
+También se identifican algunos valores atípicos notables, como un caso cercano a los 9 años de escolaridad con un ingreso que roza los **7 millones, y otro similar cerca de los 11 años**. Estos casos representan excepciones a la regla general, probablemente vinculados a emprendedores exitosos, herencias familiares o inserción en sectores económicos muy específicos.
+
+Desde una perspectiva social y económica, el gráfico permite extraer tres conclusiones fundamentales. Primero, la educación funciona más como un expansor de oportunidades que como una garantía automática de ingresos altos. Sin educación, el techo de ingresos está blindado a la baja; con educación, el techo se eleva drásticamente, pero el piso sigue estando abajo para muchos. Segundo, se observan concentraciones masivas de jóvenes en hitos institucionales clave, como los **12 años** (egreso de secundaria) y los **17 o 18 años** (egreso de carreras universitarias o técnicas profesionales). Es precisamente en estos hitos donde la desigualdad de ingresos se vuelve más evidente. Tercero, la línea de regresión, aunque útil para mostrar la dirección general de la asociación, puede resultar engañosa porque la masa de datos en la base es gigantesca y la media es estirada hacia arriba por los pocos sueldos millonarios de la cúspide.
+
+En conclusión, para las políticas públicas este gráfico indica que la educación sola no basta. Si bien aumentar los años de escolaridad es clave para dar la posibilidad de salir de la pobreza, el mercado laboral distribuye de forma muy desigual los ingresos entre los jóvenes profesionales. Por lo tanto, se requiere analizar con mayor profundidad qué sucede en la educación superior, incluyendo la calidad de las instituciones y el campo laboral de las carreras elegidas, para entender por qué la dispersión de ingresos es tan brutal en los niveles educativos más altos. Una recomendación adicional sería calcular la mediana del ingreso por cada nivel educativo, ya que esta es menos sensible a los valores extremos y reflejaría mejor la realidad del joven típico de cada grupo de escolaridad.
+
+```{r}
+# 17.Modelo de regresión lineal múltiple (estimación de modelos)
+
+# Modelo 1: Efecto simple del ingreso
+reg1 <- lm(hacinamiento_ratio ~ ingreso, data = cas_jovenes)
+
+# Modelo 2: Agregando capital humano (escolaridad)
+reg2 <- lm(hacinamiento_ratio ~ ingreso + escolaridad, data = cas_jovenes)
+
+# Modelo 3: Modelo completo con controles (edad y sexo)
+# CORRECCIÓN: Asegúrate de cerrar el paréntesis correctamente
+reg3 <- lm(hacinamiento_ratio ~ ingreso + escolaridad + edad + sexo_cat, data = cas_jovenes)
+
+
+ 
+```
+```{r}
+# 17.1 Tabla de resultados de modelos de regresión múltiple
+
+modelos_lineales <- list("M1: Ingreso" = reg1, "M2: Escolaridad" = reg2, "M3: Completo" = reg3)
+
+modelsummary(modelos_lineales, 
+             stars = TRUE, 
+             title = "Tabla 2: Modelos de Regresión Lineal para el Ratio de Hacinamiento",
+             fmt = 2,
+             gof_map = c("nobs", "r.squared"))
+
+
+```
+**Interpretación:** Los tres modelo presentan resultados estadísticamente significativos (indicando por lo que implica **p < 0.001**). Sin embargo, es importante notar que el R² (**coeficiente de determinación**) es muy bajo en todos los casos (**desde 0.013 hasta 0.061**). Esto significa que las variables independientes incluidas en estos modelos explican solo una pequeña fracción de la variabilidad total en el ratio de hacinamiento.
+
+Análisis de las variables:
+
+Categoría de referencia: para la variable sexo, la categoría de referencia son los hombres.
+
+- **Ingreso**: En todos los modelos, el coeficiente para el ingreso es negativo y significativo. Esto sugiere una relación inversa: a mayor ingreso, menor es el ratio de hacinamiento. El coeficiente del ingreso aparece como -0.00 probablemente por la unidad de medida utilizada; sin embargo, su significación estadística (**p<0.001**) indica que el efecto, aunque muy pequeño, es real y consistente.
+
+- **Escolaridad**: Al incluirla en los modelos M2 y M3, se observa un coeficiente negativo (**-0.05**). Esto sugiere que, a mayor nivel de escolaridad, disminuye el ratio de hacinamiento.
+
+- **Edad**: En el modelo M3 (el más completo), la edad tiene un coeficiente positivo (**0.02**). Esto indica que, controlando por las otras variables, a mayor edad, tiende a aumentar ligeramente el ratio de hacinamiento.
+
+- **Sexo (Mujer)**: La variable sexo_catMujer tiene un coeficiente positivo (**0.10**). Esto sugiere que, manteniendo el resto de las variables constantes, ser mujer está asociado con un ratio de hacinamiento ligeramente mayor en comparación con los hombres.
+
+En conclusión el **modelo M3** es el que mejor explica el fenómeno, al tener el R² más alto (**0.061**). Si bien los factores analizados (**ingreso, escolaridad, edad y sexo**) influyen en el hacinamiento de manera estadísticamente significativa, existen otros factores no incluidos en estos modelos que tienen un impacto mucho mayor en la determinación del ratio de hacinamiento.
+
+
+
+
+```{r}
+# 17.2 Gráfico de valores predichos
+
+# Mostraremos cómo cambia el hacinamiento según años de escolaridad
+pred_lin <- ggpredict(reg3, terms = "escolaridad")
+
+ggplot(pred_lin, aes(x = x, y = predicted)) +
+  geom_line(color = "#2a9d8f", size = 1) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, fill = "#2a9d8f") +
+  labs(title = "Efecto predicho de la escolaridad en el hacinamiento",
+       x = "Años de escolaridad",
+       y = "Ratio de Hacinamiento Predicho") +
+  theme_minimal()
+
+```
+**Interpretación:** El gráfico muestra una línea recta descendente, es decir una relación inversa que se manifiesta a través de una pendiente negativa. Esto indica que, a medida que aumentan los años de escolaridad (**eje X**), disminuye el ratio de hacinamiento predicho (**eje Y**). En valores concretos: de **0 a 20 años de escolaridad**, el ratio predicho desciende desde aproximadamente **2.0 hasta 1.0**.
+
+- **Magnitud del efecto**: La pendiente constante indica que cada año adicional de escolaridad reduce el hacinamiento en la misma cantidad. Esto es coherente con un modelo de regresión lineal donde el coeficiente de escolaridad no varía a lo largo del rango de la variable.
+
+- **Precisión de la estimación**: La franja sombreada que rodea la línea central representa el intervalo de confianza. Al ser una franja muy estrecha a lo largo de todo el recorrido, indica que la predicción del modelo es bastante precisa y que hay poca incertidumbre estadística sobre la dirección y magnitud de esta relación.
+
+En simples palabras, el gráfico muestra visualmente un efecto protector lineal: a mayor educación formal, menor hacinamiento predicho, y esta reducción es constante para cada año adicional de escolaridad.
+
+
+```{r}
+# 18. Modelo de regreción lógistica
+# Operacionalización: Crear variable dicotómica 
+# Se define 1 como presencia de hacinamiento (medio o crítico) y 0 como sin hacinamiento [1, 4]
+cas_jovenes <- cas_jovenes %>% 
+  mutate(hacinamiento_bin = if_else(hacinamiento_ratio >= 2.5, 1, 0))
+
+#Estimación del modelo logístico
+# El modelo busca predecir la probabilidad de estar en hacinamiento [2, 5]
+reg_log <- glm(hacinamiento_bin ~ ingreso + escolaridad + sexo_cat, 
+               data = cas_jovenes, 
+               family = "binomial")
+```
+```{r}
+# 18.1Tabla de resultados con Odds Ratios (OR)
+modelsummary(reg_log, 
+             exponentiate = TRUE, # Transforma coeficientes logit a Odds Ratios
+             stars = TRUE, 
+             title = "Tabla 3: Regresión Logística para Probabilidad de Hacinamiento (OR)",
+             gof_map = c("nobs", "aic"))
+```
+
+**Interpretación:** A partir de los resultados de la regresión logística estimada para analizar la probabilidad de que un joven se encuentre en situación de hacinamiento (**medio o crítico**), utilizamos como variables explicativas(**ingreso del hogar, la escolaridad y el sexo**). Donde, el modelo fue estimado sobre una muestra de **20.959** observaciones y un AIC de **10.999,3**. Asimismo, el **R²** del modelo, nos indica la proporción de variabilidad explicada por las variables incluidas, permitienos evaluar su capacidad explicativa en conjunto.
+
+Análisis de las variables:
+
+- **Escolaridad:** De acuerdo con los resultados de  los Odds Ratio (**OR = 0,868; p < 0,001**), nos evidencian que por cada año adicional de escolaridad las probabilidades de vivir en hacinamiento disminuyen aproximadamente un **13,2%**, manteniendo constantes las demás variables. Esto quiere decir que, mientrasse obtenga un mayor capital educativo se asocia con mejores oportunidades socioeconómicas y habitacionales.
+
+- **Sexo_cat(mujer):** A partir del resultado de OR siendo un **1,368** (**p < 0,001**), nos indica que las mujeres tienen un **36,8%** más probabilidades de encontrarse en situación de hacinamiento en comparación con los hombres, una vez controlados el ingreso y la escolaridad. Esto nos evidencia la persistencia de las brechas o desigualdades de género en las condiciones habitacionales de la población joven.
+
+- **Ingreso:** Los resultados son  estadísticamente significativos (**OR = 1,000; p < 0,001**), debido a que su efecto práctico es muy reducido, ya que, los **Odds Ratio** son prácticamente igual a uno. Esto nos sugiere que, el incremento de una unidad monetaria no produce cambios sustantivos en la probabilidad de una situación de hacinamiento, esta puede ser explicada a partir de la escala de medición de la variable y el gran tamaño de la muestra.
+
+En resumen, a partir del modelo lógistico, nos indican que los factores principales como la escolaridad y el sexo pueden incidir en la probabilidad de vivir en situaciones de hacinamiento en los/as jovenes en Chile, debido a que el hacinamiento puede disminuir en un **13,2%** por cada año escolar o de estudio en comparación con las brechas de género, donde las mujeres tienen más probabilidades de un **36,8 %** de encontrarse en sirtuación de hacinamiento que los hombres, mientras que el efecto del ingreso es marginal. Además, estos resultados son coherentes con la construcción del Índice de Vulnerabilidad Social, donde los menores niveles educativos y peores condiciones habitacionales representan dimensiones centrales de la vulnerabilidad social.
+
+
+```{r}
+# 18. 2 Gráfico de Probabilidades Predichas 
+# Probabilidad de estar en hacinamiento según ingresos
+pred_log <- ggpredict(reg_log, terms = "ingreso [all]")
+
+ggplot(pred_log, aes(x = x, y = predicted)) +
+  geom_line(color = "#e76f51", size = 1) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, fill = "#e76f51") +
+  scale_x_log10(labels = scales::dollar_format(prefix = "$")) +
+  labs(title = "Probabilidad predicha de hacinamiento según ingreso",
+       x = "Ingreso (escala logarítmica)",
+       y = "Probabilidad de Hacinamiento (0-1)") +
+  theme_minimal()
+```
+**Intepretación** En el graficos, podemos vizualizar la relación entre el ingreso del hogar y la probabilidad predicha de estar en situación de hacinamiento. En el **eje X** nos representa el ingreso en escala logarítmica, mientras que el **eje Y** , nos indica la probabilidad estimada de hacinamiento en un hogar, con valores entre **0 y 1**.
+
+A partir de los resultados obtenidos, se evidencian una **relación inversa entre el ingreso y la probabilidad de hacinamiento**. En los niveles más bajos del ingreso, la probabilidad predicha de encontrarse en situación de hacinamiento es cercana al **7%** , donde los ingreso más bajos, cercanos a **\$1.000-\$10.000**, la probabilidad de hacinamiento se sitúa alrededor de un **7% (0,07)**. Posteriormente, para los ingresos cercanos a **\$100.000**, la probabilidad comienza a descender levemente, ubicándose en torno al **6%**. Esto nos quiere decir que, a medida que el ingreso aumenta, la probabilidad disminuye gradualmente, observándose una caída más pronunciada en los niveles de ingreso más altos. En este sentido, a  medida que los ingresos aumentan hacia valores cercanos a **\$1.000.000**, la disminución se vuelve más evidente, alcanzando probabilidades aproximadas entre **3% y 4%**, para finalmente, en los niveles de ingreso más altos, cercanos a **\$10.000.000**, donde la probabilidad predicha de hacinamiento cae por debajo del **1%** o otros valores inferiores. Por lo tanto, a medida que aumenta el ingreso del hogar, disminuye la probabilidad de vivir en condiciones de hacinamiento.
+
+Asimismo, una banda sombreada que acompaña la curva corresponde a los intervalos de confianza del **95%**, reflejandonos la incertidumbre asociada a las estimaciones. Aunque existe cierta variabilidad en las predicciones, la tendencia descendente se mantiene a lo largo de todo el rango de ingresos, reforzado la consistencia de la relación observada.
+
+En términos sustantivos, estos resultados nos indican que el ingreso constituye un factor relevante para explicar las condiciones habitacionales de los hogares. Específicamente, debido a que un mayor nivel de ingresos con mayores recursos económicos, pueden reducir significativamente las probabilidades de experimentar una situación de hacinamiento en los/as jovenes. En este sentido, los recursos económicos pueden funcionar como un mecanismo de protección frente a esta forma de vulnerabilidad residencial o situacióndes de hacinamiento en condiciones precarias.
+
+
+![Muchas gracias por su atención](https://images.meme-arsenal.com/1ed23d9342f711d43936b3854c86d6be.jpg)
