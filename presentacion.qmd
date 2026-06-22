@@ -1,12 +1,13 @@
 ---
 title: "Desigualdades de hacinamiento de jóvenes en Chile"
 author: "Valentina Sassi y Krishna Arce"
-format: 
+format:
   revealjs:
     theme: moon
     slide-number: true
-    transition: fade
-    css: estilos.css
+    center: true
+    width: 1280
+    height: 720
 ---
 
 # Introducción
@@ -15,7 +16,6 @@ format:
 
 ::::: columns
 ::: {.column width="50%"}
-
 **Chile presenta desigualdades económicas que afectan a los jóvenes:**
 
 -   Diferencias intra e interregionales (Mieres Brevis, 2020)
@@ -61,6 +61,7 @@ Analizar la relación entre ingresos y hacinamiento en jóvenes CASEN 2022.
 :::::
 
 # Metodología
+
 ::::: columns
 ::: {.column width="50%"}
 ### Datos
@@ -122,7 +123,7 @@ Los resultados muestran una importante desigualdad económica entre los jóvenes
 
 # Distribución de ingresos
 
-![](images/clipboard-162418904.png){width="84%"}
+![](images/clipboard-162418904.png){width="548"}
 
 ## Interpretación
 
@@ -130,19 +131,19 @@ La distribución de ingresos presenta una fuerte asimetría hacia la derecha. Es
 
 # Distribución del Hacinamiento
 
-+----------------------+--------------+--------------+
-|                      |              |              |
-+----------------------+--------------+--------------+
-| hacinamiento_cat     | n            | porcentaje   |
-|                      |              |              |
-| \<ord\>              | \<dbl\>      | \<dbl\>      |
-+----------------------+--------------+--------------+
-| Sin hacinamiento     | 3175853      | 92.0         |
-+----------------------+--------------+--------------+
-| Hacinamiento medio   | 258284       | 7.5          |
-+----------------------+--------------+--------------+
-| Hacinamiento crítico | 16150        | 0.5          |
-+----------------------+--------------+--------------+
++----------------------+------------+------------+
+|                      |            |            |
++----------------------+------------+------------+
+| hacinamiento_cat     | n          | porcentaje |
+|                      |            |            |
+| \<ord\>              | \<dbl\>    | \<dbl\>    |
++----------------------+------------+------------+
+| Sin hacinamiento     | 3175853    | 92.0       |
++----------------------+------------+------------+
+| Hacinamiento medio   | 258284     | 7.5        |
++----------------------+------------+------------+
+| Hacinamiento crítico | 16150      | 0.5        |
++----------------------+------------+------------+
 
 ## Resultados
 
@@ -152,7 +153,7 @@ La distribución de ingresos presenta una fuerte asimetría hacia la derecha. Es
 
 # Gráfico de distribución del hacinamiento
 
-![](images/clipboard-440092535.png)
+![](images/clipboard-440092535.png){width="670"}
 
 ## Interpretación
 
@@ -160,7 +161,7 @@ Los resultados muestran que la gran mayoría de los jóvenes no presenta condici
 
 # Distribución de la pobreza
 
-![](images/clipboard-800244217.png)
+![](images/clipboard-2394569968.png){width="616"}
 
 ## Interpretación
 
@@ -198,7 +199,7 @@ Se construyó mediante estandarización Z-score de:
 
 # Distribución del IVS
 
-![](images/clipboard-1469267972.png){width="634"}
+![](images/clipboard-1469267972.png){width="654"}
 
 ## Interpretación
 
@@ -206,7 +207,7 @@ El histograma presenta una distribución normal y simétrica, concentrando más 
 
 # Matriz de Correlaciones
 
-![](images/clipboard-976449184.png){width="526"}
+![](images/clipboard-976449184.png)
 
 ## Tabla con resultados
 
@@ -224,7 +225,7 @@ El histograma presenta una distribución normal y simétrica, concentrando más 
 
 # Asociación entre Escolaridad e Ingreso
 
-![](images/clipboard-1844205307.png){width="636"}
+![](images/clipboard-1193510099.png){width="605"}
 
 ## Interpretación
 
@@ -260,7 +261,7 @@ Se estimaron tres modelos para analizar los factores asociados al ratio de hacin
 
 # Efecto Predicho de la Escolaridad
 
-![](images/clipboard-2325631305.png)
+![](images/clipboard-43595648.png){width="578"}
 
 ## Interpretación
 
@@ -290,7 +291,7 @@ Presencia de hacinamiento (1 = sí, 0 = no)
 
 ## Ingreso y probabilidad de hacinamiento
 
-![](images/clipboard-4010729627.png)
+![](images/clipboard-2123567362.png){width="631"}
 
 ## Hallazgo
 
@@ -324,8 +325,8 @@ El gráfico muestra una **relación inversa entre ingreso y hacinamiento**: a me
 
 -   Mieres Brevis, Michelle. 2020. «La Dinamica de La Desigualdad En Chile: Una Mirada Regional». Revista de Análisis Económico 35 (2): 91-133. https://doi.org/10.4067/S0718-88702020000200091.
 
--   Serey, Claudia. 2023. «El rol del Estado en el aseguramiento del derecho a una vivienda adecuada en Chile». Tesis doctoral. 
+-   Serey, Claudia. 2023. «El rol del Estado en el aseguramiento del derecho a una vivienda adecuada en Chile». Tesis doctoral.
 
 # Muchas Gracias
 
-![](images/clipboard-3276239241.png)
+![](images/clipboard-1624915735.png)
